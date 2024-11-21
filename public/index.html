@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login og aktive brugere</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input {
+            margin: 5px 0;
+            padding: 10px;
+            width: calc(100% - 22px);
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Login og aktive brugere</h1>
+
+<!-- Registreringsformular -->
+<form action="/register" method="POST">
+    <h2>Register</h2>
+    <input type="text" name="username" placeholder="Brugernavn" required>
+    <input type="password" name="password" placeholder="Kodeord" required>
+    <button type="submit">Registrer</button>
+</form>
+
+<!-- Login formular -->
+<form action="/login" method="POST">
+    <h2>Login</h2>
+    <input type="text" name="username" placeholder="Brugernavn" required>
+    <input type="password" name="password" placeholder="Kodeord" required>
+    <button type="submit">Log ind</button>
+</form>
+
+<!-- Logout formular -->
+<form action="/logout" method="POST">
+    <button type="submit">Log ud</button>
+</form>
+
+<!-- Liste over aktive brugere -->
+<h2>Aktive brugere</h2>
+<ul id="activeUsers"></ul>
+
+<script>
+    // Hent og vis aktive brugere
+    async function fetchActiveUsers() {
+        const response = await fetch('/active-users');
+        const users = await response.json();
+        const userList = document.getElementById('activeUsers');
+        userList.innerHTML = '';
+        users.forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = user;
+            userList.appendChild(li);
+        });
+    }
+
+    // Opdater listen over aktive brugere hver 5. sekund
+    setInterval(fetchActiveUsers, 5000);
+    fetchActiveUsers(); // Initial hentning
+</script>
+</body>
+</html>
